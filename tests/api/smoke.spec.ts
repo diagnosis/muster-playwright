@@ -1,12 +1,10 @@
-import {test} from "playwright/test"
-import {errors, expect, request} from "@playwright/test";
-import {ApiEnvelope, Outing, Page} from "@api/types";
+import {test, expect} from "@fixtures/index"
 import {OutingsApi} from "@api/outings";
 
 
-test("lets see if browse works", async ({request})=>{
+test("lets see if browse works", async ({outings})=>{
 
-    const page = await (new OutingsApi(request).list({limit:5}))
+    const page = await outings.list({limit:5})
     const list = page.items
     expect(list.length).toBeLessThanOrEqual(5)
     for (const outing of list) {
