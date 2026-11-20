@@ -4,6 +4,8 @@ export type Difficulty = 'easy' | 'moderate' | 'hard'
 export type Pace = 'relaxed' | 'moderate' | 'fast'
 export type Phase = 'upcoming' | 'past' | 'in_progress'
 export type OutingStatus = 'open' | 'cancelled'
+export type Experience = 'beginner' | 'intermediate' | 'experienced'
+
 export interface ApiEnvelope<T> {
     data: T
     correlation_id: string
@@ -19,6 +21,39 @@ export interface ApiErrorDetails{
     correlation_id:string
     timestamp:string
 }
+
+export interface RegisterInput{
+    email:string
+    password:string
+    name:string
+    experience:Experience
+    home_area?: string
+    bio?: string
+    gender?: string
+}
+
+export interface Hiker{
+    id: string
+    email: string
+    name: string
+    experience: Experience
+    home_area?: string
+    bio?: string
+    gender?: string
+    created_at: string
+    updated_at: string
+    verified_at: string | null
+}
+
+export interface ResponseMessage{
+    message: string
+}
+
+export interface LoginInput{
+    email: string
+    password: string
+}
+
 export interface Page<T>{
     items: T[]
     next_cursor: string | null

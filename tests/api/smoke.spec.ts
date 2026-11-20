@@ -1,5 +1,4 @@
 import {test, expect} from "@fixtures/index"
-import {OutingsApi} from "@api/outings";
 
 
 test("lets see if browse works", async ({outings})=>{
