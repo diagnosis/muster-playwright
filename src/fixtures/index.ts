@@ -1,9 +1,10 @@
-import {APIRequestContext, request, test as base} from '@playwright/test'
+import {APIRequestContext, request,  test as base} from '@playwright/test'
 import {OutingsApi} from "@api/outings";
 import {Hiker, RegisterInput} from "@api/types";
 import {AuthApi} from "@api/auth";
 import {uniqueIdentity} from "@data/identity";
 import {DBClient} from "@data/db";
+import {Header} from "@pages/components/Header";
 
 export interface Actor{
     hiker: Hiker
@@ -17,6 +18,8 @@ export interface Actor{
 type Fixtures = {
     outings: OutingsApi
     createActor: (overrides?: Partial<RegisterInput>) => Promise<Actor>
+    header: Header
+    loginAs: (actor:Actor) => Promise<void>
 }
 
 type WorkerFixtures = {
@@ -54,7 +57,18 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
             return actor
         } )
         await Promise.all(created.map(actor => actor.dispose()))
+    },
+    header: async ({page, isMobile}, use)=>{
+        const header = new Header(page, isMobile)
+        await use (header)
+    },
+    loginAs: async({ context }, use) => {
+        await use(async (actor:Actor)=>{
+            const state = await actor.ctx.storageState()
+            await context.addCookies(state.cookies)
+        })
     }
+
 })
 
 export {expect} from '@playwright/test'

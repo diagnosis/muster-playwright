@@ -1,12 +1,15 @@
-import {test, expect} from "@playwright/test";
-import {Header} from "@pages/components/Header";
+import {test} from "@fixtures/index";
 
 
 test.describe("smoke", ()=>{
-    test("go to outings", async ({page, isMobile})=>{
-        const header = new Header(page, isMobile)
+    test("go to outings", async ({header, page})=>{
         await page.goto("/")
         await header.expectLoggedOut()
-        await expect(header.root).toBeVisible()
+    })
+    test("expect login", async ({header, page, loginAs, createActor}) =>{
+        const hiker = await createActor()
+        await loginAs(hiker)
+        await page.goto("/")
+        await header.expectLoggedIn()
     })
 })
