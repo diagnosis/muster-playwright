@@ -62,4 +62,17 @@ export class Header {
         }
         await expect(this.menuToggle).toHaveAttribute('aria-expanded', 'true')
     }
+    async goToLogin(){
+        await this.openMenu()
+        await this.login.click()
+    }
+    async signOut(){
+        await this.openMenu()
+        await this.logout.click()
+        await this.expectMenuClosed()
+    }
+    private async expectMenuClosed(){
+        if (!this.isMobile) return
+        await expect(this.menuToggle).toHaveAttribute('aria-expanded', 'false')
+    }
 }

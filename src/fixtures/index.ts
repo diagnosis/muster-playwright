@@ -5,6 +5,7 @@ import {AuthApi} from "@api/auth";
 import {uniqueIdentity} from "@data/identity";
 import {DBClient} from "@data/db";
 import {Header} from "@pages/components/Header";
+import {LoginPage} from "@pages/LoginPage";
 
 export interface Actor{
     hiker: Hiker
@@ -20,6 +21,7 @@ type Fixtures = {
     createActor: (overrides?: Partial<RegisterInput>) => Promise<Actor>
     header: Header
     loginAs: (actor:Actor) => Promise<void>
+    loginPage: LoginPage
 }
 
 type WorkerFixtures = {
@@ -67,7 +69,12 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
             const state = await actor.ctx.storageState()
             await context.addCookies(state.cookies)
         })
+    },
+    loginPage: async ({page}, use) =>{
+        const login = new LoginPage(page)
+        await use(login)
     }
+
 
 })
 
