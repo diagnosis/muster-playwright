@@ -18,4 +18,8 @@ export class AuthApi{
         const resp = await this.request.post('/api/auth/login', {data})
         return unwrap<Hiker>(resp)
     }
+    async me(){
+        const resp = await this.request.get('/api/auth/me')
+        return unwrap<Hiker>(resp)
+    }
 }

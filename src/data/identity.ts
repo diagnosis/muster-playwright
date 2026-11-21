@@ -15,7 +15,7 @@ const EXPERIENCE:Experience[] = ['beginner', 'intermediate', 'experienced']
 const COMMON_PASS = "Passw0rd!123"
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-const pick = <T>(a: T[]): T => {
+export const pick = <T>(a: T[]): T => {
     const item = a[Math.floor(Math.random() * a.length)]
     if (item === undefined) throw new Error('pick: empty array')
     return item

@@ -9,5 +9,14 @@ test.describe("my actor test", () => {
         for (const outing of outings.items){
             expect(outing.status).toBe("open")
         }
+        const me = await actor.auth.me()
+        expect(me.id).toBe(actor.hiker.id)
+    })
+    test("I should create 2 actors", async ({createActor})=> {
+        const [host, hiker] = await Promise.all([createActor(), createActor()])
+        const meHost = await host.auth.me()
+        const meHiker = await hiker.auth.me()
+
+        expect(meHiker.id).not.toEqual(meHost.id)
     })
 })

@@ -13,7 +13,8 @@
      "@api/*": ["./src/api/*"],
      "@data/*": ["./src/data/*"],
      "@fixtures/*": ["./src/fixtures/*"],
-     "@pages/*": ["./src/pages/*"]
+     "@pages/*": ["./src/pages/*"],
+     "@utils/*": ["./src/utils/*"]
    }
  },
   "include": ["src","tests","playwright.config.ts"],

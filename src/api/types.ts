@@ -92,3 +92,19 @@ export interface Capacity{
     waiting_count: number
 }
 
+export interface CreateOutingInput{
+    title: string
+    destination: string
+    meet_label: string
+    host_seats: number
+    cost_per_seat_cents: number
+    meet_lat?: number | null
+    meet_lng?: number | null
+    starts_at: string
+    max_size: number
+    difficulty: Difficulty
+    pace: Pace
+    notes?: string
+    ends_at?: string | null
+}
+

@@ -3,7 +3,7 @@ import {OutingsApi} from "@api/outings";
 import {Hiker, RegisterInput} from "@api/types";
 import {AuthApi} from "@api/auth";
 import {uniqueIdentity} from "@data/identity";
-import {mintVerificationToken} from "@data/db";
+import {DBClient} from "@data/db";
 
 export interface Actor{
     hiker: Hiker
@@ -19,27 +19,32 @@ type Fixtures = {
     createActor: (overrides?: Partial<RegisterInput>) => Promise<Actor>
 }
 
-export const test = base.extend<Fixtures>({
+type WorkerFixtures = {
+    db: DBClient
+}
+
+export const test = base.extend<Fixtures, WorkerFixtures>({
+    db: [async ({}, use)=>{
+        const db = new DBClient()
+        await use(db)
+        await db.close()
+    }, {scope:'worker'}],
     outings: async ({request}, use) => {
         const outings = new OutingsApi(request)
         await use(outings)
     },
-    createActor: async({}, use) => {
+    createActor: async({db}, use) => {
         const created: Actor[] = []
 
          await use( async (overrides = {}) => {
-            const {name, email, password, experience} = uniqueIdentity()
             const input :RegisterInput = {
-                name,
-                email,
-                password,
-                experience,
+                ...uniqueIdentity(),
                 ...overrides
             }
             const ctx = await request.newContext({})
             const auth = new AuthApi(ctx)
             let hiker = await  auth.signup(input)
-            const token = await mintVerificationToken(hiker.id)
+            const token = await db.mintVerification(hiker.id)
             await auth.verifyEmail(token)
             hiker = await auth.login({email:input.email, password:input.password})
 
