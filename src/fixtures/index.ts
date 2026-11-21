@@ -6,6 +6,8 @@ import {uniqueIdentity} from "@data/identity";
 import {DBClient} from "@data/db";
 import {Header} from "@pages/components/Header";
 import {LoginPage} from "@pages/LoginPage";
+import {SignupPage} from "@pages/SingupPage";
+import * as async_hooks from "node:async_hooks";
 
 export interface Actor{
     hiker: Hiker
@@ -22,6 +24,7 @@ type Fixtures = {
     header: Header
     loginAs: (actor:Actor) => Promise<void>
     loginPage: LoginPage
+    signupPage: SignupPage
 }
 
 type WorkerFixtures = {
@@ -73,6 +76,10 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
     loginPage: async ({page}, use) =>{
         const login = new LoginPage(page)
         await use(login)
+    },
+    signupPage: async ({page}, use) =>{
+        const signup = new SignupPage(page)
+        await use(signup)
     }
 
 
