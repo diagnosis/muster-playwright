@@ -24,7 +24,7 @@ test.describe("sign up", () => {
         await signupPage.goto()
         await signupPage.signup(guest)
 
-        await expect(signupPage.pageError(EMAIL_EXISTS)).toBeVisible()
+        await expect(signupPage.alert).toHaveText(EMAIL_EXISTS)
     })
 
     for (const { password, message } of weakPasswords) {
@@ -34,8 +34,9 @@ test.describe("sign up", () => {
             await signupPage.goto()
             await signupPage.signup(guest)
 
-            await expect(signupPage.pageError(message)).toBeVisible()
-            await expect(signupPage.pageError(VALIDATION_FAILED)).toBeVisible()
+            await expect(signupPage.password).toHaveAccessibleDescription(message)
+            await expect(signupPage.alert).toHaveText(VALIDATION_FAILED)
         })
     }
+
 })

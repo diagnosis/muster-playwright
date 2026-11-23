@@ -1,5 +1,5 @@
 //src/pages/LoginPage.ts
-import {type Locator, type Page} from '@playwright/test';
+import {expect, type Locator, type Page} from '@playwright/test';
 
 export class LoginPage {
     readonly form: Locator;
@@ -10,7 +10,11 @@ export class LoginPage {
     readonly submit: Locator;
     readonly emailCodeInstead: Locator;
     readonly forgotPassword: Locator;
-    readonly invalidCredentials:Locator
+    readonly sendMeACode: Locator;
+    readonly sixDigitCode: Locator;
+    readonly resendVerification: Locator;
+    readonly alert: Locator;
+    readonly status: Locator;
 
     constructor(private readonly page: Page) {
         this.form = page.locator('form');
@@ -21,7 +25,12 @@ export class LoginPage {
         this.submit = this.form.getByRole('button', { name: 'Log in' });
         this.emailCodeInstead = page.getByRole('button', { name: 'Email me a login code instead' });
         this.forgotPassword = page.getByRole('button', { name: 'Forgot password' });
-        this.invalidCredentials = page.getByText('invalid login credentials')
+        this.sendMeACode = page.getByRole('button', { name: 'Send me a code' })
+        this.sixDigitCode = page.getByRole('textbox', { name: 'Six-digit code' })
+        this.resendVerification = page.getByRole('button', { name: 'Resend verification' })
+
+        this.alert = page.getByRole('alert')
+        this.status = page.getByRole("status")
     }
 
     async goto() {
@@ -32,6 +41,17 @@ export class LoginPage {
         await this.email.fill(email);
         await this.password.fill(password);
         await this.submit.click();
+    }
+    async requestCode(email:string){
+        await this.email.fill(email)
+        await this.emailCodeInstead.click()
+        const sent = this.page.waitForResponse(r => r.url().endsWith('/api/auth/login-code'))
+        await this.sendMeACode.click()
+        await sent
+    }
+    async submitCode(code:string){
+        await this.sixDigitCode.fill(code)
+        await this.submit.click()
     }
 
 }

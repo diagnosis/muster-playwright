@@ -1,4 +1,5 @@
 import {test, expect} from "@fixtures/index"
+import {INVALID_CREDENTIALS} from "@data/copy";
 
 test.describe("login specs", ()=> {
     test("a guest open login from header", async ({header, page, loginPage}) => {
@@ -16,7 +17,7 @@ test.describe("login specs", ()=> {
         await loginPage.goto()
         const {hiker:{email}} = await createActor()
         await loginPage.login(email, "WrongPassword123")
-        await expect(loginPage.invalidCredentials).toBeVisible()
+        await expect(loginPage.alert).toHaveText(INVALID_CREDENTIALS)
         await header.expectLoggedOut()
     })
     test("a hiker logs out", async ({createActor,loginAs, header, page}) => {

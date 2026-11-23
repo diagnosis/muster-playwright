@@ -18,6 +18,7 @@ export class SignupPage {
     readonly togglePassword: Locator;
     readonly experience: Locator;
     readonly submit: Locator;
+    readonly alert: Locator;
 
     constructor(private readonly page: Page) {
         this.form = page.locator('form');
@@ -28,6 +29,7 @@ export class SignupPage {
         this.togglePassword = this.form.getByRole('button', { name: /(show|hide) password/i });
         this.experience = this.form.getByRole('group', { name: 'Experience' });
         this.submit = this.form.getByRole('button', { name: 'Sign up' });
+        this.alert = this.page.getByRole("alert")
     }
 
     experienceOptionLabel(experience:Experience): Locator {
@@ -35,9 +37,6 @@ export class SignupPage {
     }
     experienceOptionRadio(experience:Experience): Locator {
         return this.experience.getByRole('radio', {name:EXPERIENCE_LEVEL[experience],exact:true});
-    }
-    pageError(text: string): Locator {
-        return this.form.getByText(text)
     }
     async goto() {
         await this.page.goto('/signup');

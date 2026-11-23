@@ -26,6 +26,16 @@ export class DBClient{
     async close(){
         await this.pool.end()
     }
+    async mintLoginCode(hikerId:string, overrides: MintOverrides={}) {
+       const raw = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0')
+       await this.pool.query(
+           `INSERT INTO auth_tokens (id, hiker_id, token_hash, purpose, created_at, expires_at)
+         VALUES (gen_random_uuid(), $1, $2, $3, now(), now() + make_interval(mins => $4))`,
+           [hikerId, this.hashToken(hikerId+raw), overrides.purpose ?? 'login_code', overrides.ttlMins ?? 10],
+       )
+        return raw
+    }
+
 }
 
 
