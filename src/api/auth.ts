@@ -1,4 +1,4 @@
-import {APIRequestContext, request} from "@playwright/test";
+import {APIRequestContext} from "@playwright/test";
 import {unwrap} from "@api/http";
 import {Hiker, LoginInput, RegisterInput, ResponseMessage} from "@api/types";
 

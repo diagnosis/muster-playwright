@@ -56,11 +56,12 @@ export class Header {
     }
     private async openMenu() {
         if (!this.isMobile) return
-
-        if (await this.menuToggle.getAttribute('aria-expanded') === 'false') {
-            await this.menuToggle.click()
-        }
-        await expect(this.menuToggle).toHaveAttribute('aria-expanded', 'true')
+        await expect(async () => {
+            if (await this.menuToggle.getAttribute('aria-expanded') !== 'true') {
+                await this.menuToggle.click()
+            }
+            await expect(this.menuToggle).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 })
+        }).toPass()
     }
     async goToLogin(){
         await this.openMenu()

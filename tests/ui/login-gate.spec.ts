@@ -4,6 +4,7 @@ import {expect, test} from "@fixtures/index"
 import {RESEND_VERIFICATION_STATUS, VERIFY_EMAIL, VERIFY_SUCCESS} from "@data/copy";
 
 test.describe("login gate", ()=>{
+
     test("An unverified user cannot login with password", async ({createActor, loginPage}) => {
         const actor = await createActor({},{verified:false})
         const {hiker} = actor
@@ -11,6 +12,7 @@ test.describe("login gate", ()=>{
         await loginPage.login(hiker.email, actor.password)
         await expect(loginPage.alert).toHaveText(VERIFY_EMAIL)
     })
+
     test("an unverified user can ask for a new verification email", async ({createActor, loginPage}) => {
         const actor = await createActor({},{verified:false})
         const {hiker} = actor
@@ -19,6 +21,7 @@ test.describe("login gate", ()=>{
         await loginPage.resendVerification.click()
         await expect(loginPage.status).toHaveText(RESEND_VERIFICATION_STATUS)
     })
+
     test("once verified, the user can log in", async ({createActor, loginPage, db, verifyEmailPage, header})=>{
         const actor = await createActor({},{verified:false})
         const {hiker} = actor

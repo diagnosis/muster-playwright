@@ -1,5 +1,6 @@
 //src/pages/LoginPage.ts
 import {expect, type Locator, type Page} from '@playwright/test';
+import {RESET_EMAIL_TEXT} from "@data/copy";
 
 export class LoginPage {
     readonly form: Locator;
@@ -52,6 +53,12 @@ export class LoginPage {
     async submitCode(code:string){
         await this.sixDigitCode.fill(code)
         await this.submit.click()
+    }
+    async requestPasswordReset(email:string){
+        await expect(this.forgotPassword).toBeDisabled()
+        await this.email.fill(email)
+        await this.forgotPassword.click()
+        await expect(this.status).toHaveText(RESET_EMAIL_TEXT)
     }
 
 }

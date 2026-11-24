@@ -1,3 +1,4 @@
+
 import {test, expect} from "@fixtures/index";
 
 
@@ -12,6 +13,7 @@ test.describe("my actor test", () => {
         const me = await actor.auth.me()
         expect(me.id).toBe(actor.hiker.id)
     })
+
     test("I should create 2 actors", async ({createActor})=> {
         const [host, hiker] = await Promise.all([createActor(), createActor()])
         const meHost = await host.auth.me()

@@ -1,3 +1,4 @@
+
 import {test, expect} from "@fixtures/index"
 import {AuthApi} from "@api/auth";
 import {Header} from "@pages/components/Header";
@@ -20,6 +21,7 @@ test.describe("auth specs", ()=>{
         await refreshed
         await header.expectLoggedIn()
     });
+
     test("broken refresh token logs user out", async ({createActor, loginAs, page, header, context})=>{
         const hiker = await createActor()
         await loginAs(hiker)
@@ -32,14 +34,17 @@ test.describe("auth specs", ()=>{
         await page.reload()
         await header.expectLoggedOut()
     })
-    test("login with code", async ({createActor, loginPage, db, header})=>{
+
+    test("login with code", async ({createActor, loginPage, db, header, page})=>{
         const {hiker} = await createActor()
         await loginPage.goto()
         await loginPage.requestCode(hiker.email)
         const code = await db.mintLoginCode(hiker.id)
         await loginPage.submitCode(code)
+        await expect(page).toHaveURL('/')
         await header.expectLoggedIn()
     })
+
     test("login with code will by-pass verification step", async ({createActor, loginPage, db, header, page})=>{
         const actor =await createActor({}, {verified:false})
         await loginPage.goto()
@@ -50,6 +55,7 @@ test.describe("auth specs", ()=>{
         const me = await new AuthApi(page.request).me()
         expect(me.verified_at).not.toBeNull()
     })
+
     test("A hiker logs in, with the app opens in tow tabs. They log out in the second tab", async({createActor, loginAs, context, isMobile, header, page})=>{
         const actor = await createActor()
         await loginAs(actor)
@@ -65,16 +71,19 @@ test.describe("auth specs", ()=>{
 })
 
 test.describe("route guards", ()=>{
+
     test("A guest who opens /me/outings lands on /login", async({page})=>{
         await page.goto("/me/outings")
         await expect(page).toHaveURL("/login")
     })
+
     test("A logged-in user who opens /login lands on /", async ({createActor, loginAs, page})=>{
         const actor = await createActor()
         await loginAs(actor)
         await page.goto("/login")
         await expect(page).toHaveURL("/")
     })
+
     test("An unknown URL shows the 'Dead end' page", async({page})=>{
         await page.goto("/unknown")
         await expect(page.getByText("Dead end")).toBeVisible()

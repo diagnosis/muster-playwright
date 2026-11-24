@@ -1,11 +1,7 @@
 import {test, expect} from "@fixtures/index";
 import {uniqueIdentity} from "@data/identity";
-import {EMAIL_EXISTS, INVALID_PASSWORD, SHORT_PASSWORD, VALIDATION_FAILED} from "@data/copy";
+import {EMAIL_EXISTS, VALIDATION_FAILED, WEAK_PASSWORDS} from "@data/copy";
 
-const weakPasswords = [
-    { password: 'SH0rT@1', message: SHORT_PASSWORD },
-    { password: 'WeakPassword', message: INVALID_PASSWORD },
-]
 
 test.describe("sign up", () => {
     test("a guest can sign up", async ({page, signupPage}) => {
@@ -27,7 +23,7 @@ test.describe("sign up", () => {
         await expect(signupPage.alert).toHaveText(EMAIL_EXISTS)
     })
 
-    for (const { password, message } of weakPasswords) {
+    for (const { password, message } of WEAK_PASSWORDS) {
         test(`weak password "${password}" is rejected`, async ({signupPage}) => {
             const guest = { ...uniqueIdentity(), password }
 

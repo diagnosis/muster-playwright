@@ -13,6 +13,7 @@ test.describe("verify email", ()=>{
         await verifyEmailPage.loginLink.click()
         await expect(page).toHaveURL('/login')
     })
+
     test("A token used twice", async ({createActor, db, verifyEmailPage})=>{
         const actor = await createActor({},{verified:false})
         const {hiker} = actor
@@ -22,6 +23,7 @@ test.describe("verify email", ()=>{
         await verifyEmailPage.goto(raw)
         await expect(verifyEmailPage.error).toHaveText(VERIFY_EXPIRED_OR_USED)
     })
+
     for (const cc of cases){
         test(`${cc.name} token`, async ({verifyEmailPage})=>{
             await verifyEmailPage.goto(cc.token)
