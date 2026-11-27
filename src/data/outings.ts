@@ -1,6 +1,6 @@
 // src/data/outings.ts
 
-import {CreateOutingInput} from "@api/types";
+import {CreateOutingInput, JoinRequestInput} from "@api/types";
 import {pick, tag} from "@data/identity";
 import {hoursFromNowISO} from "@utils/date";
 
@@ -44,6 +44,14 @@ export function uniqueOuting(overrides: Partial<CreateOutingInput> = {}):CreateO
         ...pickedOuting,
         title: `${pickedOuting.title} ${tag()}`,
         starts_at: hoursFromNowISO(pick(HOURS)),
+        ...overrides
+    }
+}
+export function defaultJoinRequest(overrides: Partial<JoinRequestInput> = {}) :JoinRequestInput{
+    return {
+        role: 'rider',
+        seats_offered: 0,
+        guests: 0,
         ...overrides
     }
 }

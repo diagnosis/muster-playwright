@@ -5,7 +5,7 @@ export type Pace = 'relaxed' | 'moderate' | 'fast'
 export type Phase = 'upcoming' | 'past' | 'in_progress'
 export type OutingStatus = 'open' | 'cancelled'
 export type Experience = 'beginner' | 'intermediate' | 'experienced'
-
+export type HikerRole = 'rider' | 'driver'
 export interface ApiEnvelope<T> {
     data: T
     correlation_id: string
@@ -106,5 +106,25 @@ export interface CreateOutingInput{
     pace: Pace
     notes?: string
     ends_at?: string | null
+}
+
+export type RequestStatus = 'requested' | 'accepted' | 'declined' | 'withdrawn'
+export type JoinRequestInput = {
+    role: HikerRole;
+    seats_offered?: number; // Driver only
+    guests?: number;
+    note?: string;
+};
+export interface JoinRequest {
+    id: string
+    outing_id: string
+    hiker_id: string
+    status: RequestStatus
+    role: HikerRole
+    seats_offered: number
+    guests: number
+    note?: string
+    created_at: string
+    updated_at: string
 }
 

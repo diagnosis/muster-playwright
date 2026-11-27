@@ -35,6 +35,18 @@ export class DBClient{
        )
         return raw
     }
+    async setOutingTimes(outingId: string, startsAt: Date, endsAt: Date | null) {
+        await this.pool.query(
+            `UPDATE outings SET starts_at = $2, ends_at = $3 WHERE id = $1`,
+            [outingId, startsAt, endsAt],
+        )
+    }
+    async moveToFront(...outingIds: string[]){
+        const soon = new Date(Date.now() + 5 * 60 * 1000)
+        for (const id of outingIds){
+            await this.setOutingTimes(id, soon, null)
+        }
+    }
 
 }
 

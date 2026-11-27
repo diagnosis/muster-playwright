@@ -9,9 +9,9 @@ export class VerifyEmailPage{
     readonly loginLink: Locator
 
     constructor(private readonly page: Page) {
-        this.content = page.locator('#root > div[class*="_shell_"]');
-        this.message = this.content.locator('p');
-        this.error = this.content.locator('p[class*="_error_"]');
+        this.content = page.getByRole("main")
+        this.message = this.content.getByRole("status");
+        this.error = this.content.getByRole("alert")
         this.loginLink = this.content.getByRole('link', { name: 'Log in' });
     }
 

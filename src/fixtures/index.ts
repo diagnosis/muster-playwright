@@ -9,6 +9,8 @@ import {LoginPage} from "@pages/LoginPage";
 import {SignupPage} from "@pages/SingupPage";
 import {VerifyEmailPage} from "@pages/VerifyEmailPage";
 import {ResetPasswordPage} from "@pages/ResetPasswordPage";
+import {BrowseOutingsPage} from "@pages/BrowseOutingPage";
+import {OutingDetailsPage} from "@pages/OutingDetailsPage";
 
 export interface Actor{
     hiker: Hiker
@@ -28,6 +30,8 @@ type Fixtures = {
     signupPage: SignupPage
     verifyEmailPage: VerifyEmailPage
     resetPasswordPage: ResetPasswordPage
+    browsePage: BrowseOutingsPage
+    detailsPage: OutingDetailsPage
 }
 
 type WorkerFixtures = {
@@ -97,7 +101,16 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
     resetPasswordPage: async({page}, use)=>{
         const resetPassword = new ResetPasswordPage(page)
         await use(resetPassword)
+    },
+    browsePage: async({page}, use)=>{
+        const browse = new BrowseOutingsPage(page)
+        await use(browse)
+    },
+    detailsPage: async ({page}, use)=>{
+        const details = new OutingDetailsPage(page)
+        await use(details)
     }
+
 
 
 })

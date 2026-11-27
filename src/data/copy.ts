@@ -26,4 +26,10 @@ export const WEAK_PASSWORDS =
     ]
 
 
+export const SLOT_MESSAGE = {
+    requested: 'Requested — waiting on host',
+} as const
+
+export const SLOT_FULL_WARNING = "⚠️This outing is full — you can still request in case a spot opens."
+
 
